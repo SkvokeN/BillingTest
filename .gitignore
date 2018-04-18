@@ -1,0 +1,16 @@
+
+###> symfony/framework-bundle ###
+/.env
+/public/bundles/
+/var/
+/vendor/
+/.idea
+.php_cs.cache
+php-cs-fixer
+php-cs-fixer-v2.phar
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###

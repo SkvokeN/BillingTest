@@ -1,0 +1,67 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Transaction\DebitTransaction:
+        class: App\Transaction\DebitTransaction
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@App\Transaction\Creators\EntityForTransactionCreator'
+            - '@logger'
+
+    App\Transaction\TransferTransaction:
+        class: App\Transaction\TransferTransaction
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@App\Transaction\Creators\EntityForTransactionCreator'
+            - '@logger'
+
+    App\Transaction\DepositTransaction:
+        class: App\Transaction\DepositTransaction
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@App\Transaction\Creators\EntityForTransactionCreator'
+            - '@logger'
+
+    app.consumer.deposit_operation:
+        class: App\Consumer\AccountOperationConsumer
+        arguments:
+            - '@old_sound_rabbit_mq.delay_send_billing_producer'
+            - '@App\Consumer\Dto\CreatorDtoForDeposit'
+            - '@App\Transaction\DepositTransaction'
+            - '@logger'
+
+    app.consumer.debit_operation:
+        class: App\Consumer\AccountOperationConsumer
+        arguments:
+            - '@old_sound_rabbit_mq.delay_send_billing_producer'
+            - '@App\Consumer\Dto\CreatorDtoForDebit'
+            - '@App\Transaction\DebitTransaction'
+            - '@logger'
+
+    app.consumer.transfer_operation:
+        class: App\Consumer\AccountOperationConsumer
+        arguments:
+            - '@old_sound_rabbit_mq.delay_send_billing_producer'
+            - '@App\Consumer\Dto\CreatorDtoForTransfer'
+            - '@App\Transaction\TransferTransaction'
+            - '@logger'
+
