@@ -10,9 +10,9 @@ use App\Entity\AccountingTransaction;
 
 class EntityForTransactionCreator implements EntityForTransactionCreatorInterface
 {
-    public function createAccountingTransaction(string $type, int $amount, ?Account $sender, ?Account $recipient): AccountingTransaction
+    public function createAccountingTransaction(string $type, string $tid, int $amount, ?Account $sender, ?Account $recipient): AccountingTransaction
     {
-        return new AccountingTransaction($type, $amount, $sender, $recipient);
+        return new AccountingTransaction($type, $amount, $tid, $sender, $recipient);
     }
 
     public function createAccountingEntry(Account $account, AccountingTransaction $accountingTransaction, int $amount): AccountingEntry

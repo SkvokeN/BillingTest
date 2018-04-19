@@ -10,7 +10,7 @@ use App\Entity\AccountingTransaction;
 
 interface EntityForTransactionCreatorInterface
 {
-    public function createAccountingTransaction(string $type, int $amount, ?Account $sender, ?Account $recipient): AccountingTransaction;
+    public function createAccountingTransaction(string $type, string $tid, int $amount, ?Account $sender, ?Account $recipient): AccountingTransaction;
 
     public function createAccountingEntry(Account $account, AccountingTransaction $accountingTransaction, int $amount): AccountingEntry;
 }

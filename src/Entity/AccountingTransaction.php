@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="accounting_transaction")
+ * @ORM\Table(name="accounting_transaction", uniqueConstraints={@UniqueConstraint(name="transaction_id", columns={"tid"})})
  */
 class AccountingTransaction
 {
@@ -26,6 +27,12 @@ class AccountingTransaction
      * @ORM\Column(name="type", type="string")
      */
     private $type;
+
+    /**
+     * @var string
+     * @ORM\Column(name="tid", type="string")
+     */
+    private $tid;
 
     /**
      * @var int
@@ -57,9 +64,10 @@ class AccountingTransaction
      */
     private $createAt;
 
-    public function __construct(string $type, int $amount, ?Account $sender, ?Account $recipient)
+    public function __construct(string $type, int $amount, string $tid, ?Account $sender, ?Account $recipient)
     {
         $this->type = $type;
+        $this->tid = $tid;
         $this->amount = $amount;
         $this->sender = $sender;
         $this->recipient = $recipient;

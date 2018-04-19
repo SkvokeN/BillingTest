@@ -17,6 +17,9 @@ class AccountOperationConsumer implements ConsumerInterface
     public const SENDER_INDEX_NAME = 'senderId';
     public const TYPE_INDEX_NAME = 'billingType';
     public const AMOUNT_INDEX_NAME = 'amount';
+    public const TID_INDEX_NAME = 'tid';
+    public const COUNT_INDEX_NAME = 'countQuery';
+    public const MAX_COUNT_QUERY = 5;
 
     /**
      * @var CreatorDtoInterface
@@ -50,11 +53,14 @@ class AccountOperationConsumer implements ConsumerInterface
             $body = unserialize($msg->getBody());
             $depositDto = $this->creatorDto->createDto($body);
 
-            return $this->transaction->process($depositDto);
+            if (isset($body[self::COUNT_INDEX_NAME]) && $body[self::COUNT_INDEX_NAME] > self::MAX_COUNT_QUERY) {
+                return true;
+            }
 
-//            if (!$this->transaction->process($depositDto)) {
-//                $this->delayedProducer->publish($msg->getBody(), $depositDto->getType());
-//            }
+            if (!$this->transaction->process($depositDto)) {
+                $body[self::COUNT_INDEX_NAME] = ($body[self::COUNT_INDEX_NAME] ?? 1) + 1;
+                $this->delayedProducer->publish(serialize($body), $depositDto->getType());
+            }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }

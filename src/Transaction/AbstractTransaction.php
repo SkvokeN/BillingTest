@@ -8,6 +8,7 @@ use App\Consumer\Dto\OperationDto;
 use App\Entity\Account;
 use App\Exception\UserNotExistException;
 use App\Transaction\Creators\EntityForTransactionCreatorInterface;
+use App\Validator\OperationDtoValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -22,20 +23,28 @@ abstract class AbstractTransaction
      * @var EntityForTransactionCreatorInterface
      */
     protected $creator;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
 
-    public function __construct(EntityManagerInterface $em, EntityForTransactionCreatorInterface $creator, LoggerInterface $logger)
+    /**
+     * @var OperationDtoValidatorInterface
+     */
+    private $dtoValidator;
+
+    public function __construct(EntityManagerInterface $em, EntityForTransactionCreatorInterface $creator, LoggerInterface $logger, OperationDtoValidatorInterface $dtoValidator)
     {
         $this->em = $em;
         $this->creator = $creator;
         $this->logger = $logger;
+        $this->dtoValidator = $dtoValidator;
     }
 
     public function process(OperationDto $operationDto): bool
     {
+        $this->dtoValidator->validate($operationDto);
         $this->em->getConnection()->beginTransaction();
 
         try {

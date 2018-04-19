@@ -18,7 +18,7 @@ old_sound_rabbit_mq:
             queue_options:
                 name: billing_delayed
                 arguments:
-                    x-message-ttl: ['I', 5000]
+                    x-message-ttl: ['I', 3000]
                     x-dead-letter-exchange: ['S', 'billing']
     consumers:
         billing_deposit:

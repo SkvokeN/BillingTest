@@ -13,6 +13,7 @@ class CreatorDtoForDeposit implements CreatorDtoInterface
         return new OperationDto(
             $data[AccountOperationConsumer::AMOUNT_INDEX_NAME],
             $data[AccountOperationConsumer::TYPE_INDEX_NAME],
+            $data[AccountOperationConsumer::TID_INDEX_NAME],
             null,
             $data[AccountOperationConsumer::RECIPIENT_INDEX_NAME]
         );

@@ -21,8 +21,8 @@ class DepositTransactionTest extends AbstractTransaction
     {
         $this->repository->method('getAccountForUpdate')->willReturn($account);
         $this->em->expects($this->exactly($expectedPersistCount))->method('persist');
-        $debitTransaction = new DepositTransaction($this->em, $this->creator, $this->logger);
-        $testData = ['recipientId' => 1, 'billingType' => 'debit', 'amount' => 100];
+        $debitTransaction = new DepositTransaction($this->em, $this->creator, $this->logger, $this->dtoValidator);
+        $testData = ['recipientId' => 1, 'tid' => 'randomString', 'billingType' => 'debit', 'amount' => 100];
         $result = $debitTransaction->process((new CreatorDtoForDeposit())->createDto($testData));
 
         $this->assertEquals($result, $actualResult);

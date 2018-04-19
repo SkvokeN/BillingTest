@@ -26,6 +26,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@App\Transaction\Creators\EntityForTransactionCreator'
             - '@logger'
+            - '@App\Validator\TransactionIdValidator'
 
     App\Transaction\TransferTransaction:
         class: App\Transaction\TransferTransaction
@@ -33,6 +34,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@App\Transaction\Creators\EntityForTransactionCreator'
             - '@logger'
+            - '@App\Validator\TransactionIdValidator'
 
     App\Transaction\DepositTransaction:
         class: App\Transaction\DepositTransaction
@@ -40,6 +42,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@App\Transaction\Creators\EntityForTransactionCreator'
             - '@logger'
+            - '@App\Validator\TransactionIdValidator'
 
     app.consumer.deposit_operation:
         class: App\Consumer\AccountOperationConsumer

@@ -6,6 +6,7 @@ namespace App\Tests\Transaction;
 
 use App\Entity\Repository\AccountRepository;
 use App\Transaction\Creators\EntityForTransactionCreatorInterface;
+use App\Validator\OperationDtoValidatorInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,11 @@ abstract class AbstractTransaction extends TestCase
      */
     protected $em;
 
+    /**
+     * @var OperationDtoValidatorInterface
+     */
+    protected $dtoValidator;
+
     public function setUp()
     {
         $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -50,5 +56,7 @@ abstract class AbstractTransaction extends TestCase
         $this->em = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
         $this->em->method('getRepository')->willReturn($this->repository);
         $this->em->method('getConnection')->willReturn($this->connection);
+        $this->dtoValidator = $this->getMockBuilder(OperationDtoValidatorInterface::class)->getMock();
+        $this->dtoValidator->method('validate')->willReturn(true);
     }
 }

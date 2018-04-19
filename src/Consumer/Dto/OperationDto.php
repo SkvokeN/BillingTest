@@ -17,6 +17,11 @@ class OperationDto
     private $type;
 
     /**
+     * @var string
+     */
+    private $tid;
+
+    /**
      * @var int|null
      */
     private $sender;
@@ -25,12 +30,13 @@ class OperationDto
      */
     private $recipient;
 
-    public function __construct(int $amount, string $type, ?int $sender, ?int $recipient)
+    public function __construct(int $amount, string $type, string $tid, ?int $sender, ?int $recipient)
     {
         $this->amount = $amount;
         $this->type = $type;
         $this->sender = $sender;
         $this->recipient = $recipient;
+        $this->tid = $tid;
     }
 
     /**
@@ -47,6 +53,14 @@ class OperationDto
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTid(): string
+    {
+        return $this->tid;
     }
 
     /**

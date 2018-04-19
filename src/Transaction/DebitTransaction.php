@@ -19,6 +19,7 @@ class DebitTransaction extends AbstractTransaction
 
         $accountingTransaction = $this->creator->createAccountingTransaction(
             $operationDto->getType(),
+            $operationDto->getTid(),
             $operationDto->getAmount(),
             $senderAccount,
             null

@@ -14,6 +14,7 @@ class DepositTransaction extends AbstractTransaction
 
         $accountingTransaction = $this->creator->createAccountingTransaction(
             $operationDto->getType(),
+            $operationDto->getTid(),
             $operationDto->getAmount(),
             null,
             $recipientAccount
